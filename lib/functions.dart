@@ -1,25 +1,49 @@
 import 'dart:convert';
 
+import 'package:flutter_server_backend/models/owner.dart';
 import 'package:functions_framework/functions_framework.dart';
-import 'package:postgres/postgres.dart';
 import 'package:shelf/shelf.dart';
+
+import 'models/todo.dart';
 
 @CloudFunction()
 Future<Response> function(Request request) async {
-  var connection = PostgreSQLConnection(
-    'localhost',
-    5432,
-    'postgres',
-    username: 'postgres',
-    password: 'mysecretpassword',
-  );
-  await connection.open();
+  // var connection = PostgreSQLConnection(
+  //   'localhost',
+  //   5432,
+  //   'postgres',
+  //   username: 'postgres',
+  //   password: 'docker',
+  //   timeZone: 'America/Sao_Paulo',
+  // );
+  // await connection.open();
 
-  List<Map<String, Map<String, dynamic>>> results = await connection.mappedResultsQuery(
-    'SELECT id, task FROM TODO;',
-  );
+  // PostgreSQLResult resultRow = await connection.query(
+  //   "select timestamp_iso8601(now()::timestamptz, 'America/Sao_Paulo') as createdAt from todo",
+  // );
+  List<Todo> todos;
+  todos = [];
 
-  // print(json.encode(results));
+  ListOwners ownersList;
+  ownersList = ListOwners();
 
-  return Response.ok(json.encode(results));
+  for (var n = 0; n <= 5; n++) {
+    ownersList.owners.add(Owner(
+      id: n,
+      name: 'TESTE $n',
+    ));
+  }
+
+  for (var i = 0; i <= 10; i++) {
+    todos.add(
+      Todo.add(
+        id: i,
+        task: 'TESTE',
+        owner: Owner(id: i, name: 'Paulo'),
+        listOwner: ownersList,
+      ),
+    );
+  }
+
+  return Response.ok(jsonEncode(todos));
 }
