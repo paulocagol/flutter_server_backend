@@ -1,29 +1,30 @@
-import 'package:flutter_server_backend/models/owner.dart';
-
 class Todo {
-  int id = 0;
-  String task = '';
-  Owner? owner;
-  ListOwners? listOwner;
+  int? id;
+  String? task;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? sync;
 
   Todo.add({
-    this.id = 0,
-    this.task = '',
-    this.owner,
-    this.listOwner,
+    this.id,
+    this.task,
+    this.createdAt,
+    this.updatedAt,
+    this.sync,
   });
 
   Map<String, Map<String, dynamic>> toJson() => {
         'todo': {
           'id': id,
           'task': task,
-          'owner': owner?.toJson(),
-          'ownerlist': listOwner?.toJson(),
+          'createdAt': createdAt.toString(),
+          'updatedAt': updatedAt.toString(),
+          'sync': sync,
         }
       };
 
   @override
   String toString() {
-    return 'Todo{id: $id, task: $task}';
+    return 'Todo{id: $id, task: $task, $task, $createdAt, $updatedAt, $sync}';
   }
 }
